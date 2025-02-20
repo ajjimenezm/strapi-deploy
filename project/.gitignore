@@ -1,0 +1,36 @@
+# Node.js dependencies
+/node_modules/
+
+# Strapi build folder
+/.tmp/
+
+# Log files
+/logs/
+*.log
+
+# Environment variables file
+/.env
+
+# Strapi Admin panel build
+/build/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Coverage reports
+/coverage/
+
+# IDE files
+.idea/
+/.vscode/
+/*.swp
+
+# Yarn lock file (if you use npm, keep this line commented out)
+/yarn.lock
+
+# Local database file (if using SQLite for dev)
+data.db
+
+# Docker files
+docker-compose.override.yml

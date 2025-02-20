@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: strapi-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: strapi-app
+  template:
+    metadata:
+      labels:
+        app: strapi-app
+    spec:
+      containers:
+      - name: strapi-app
+        image: your-docker-repo/strapi-app:latest
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 1337
+        env:
+        - name: DATABASE_HOST
+          value: "your-database-host"
+        - name: DATABASE_PORT
+          value: "your-database-port"
+        - name: DATABASE_NAME
+          value: "your-database-name"
+        - name: DATABASE_USERNAME
+          value: "your-database-username"
+        - name: DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: strapi-secrets
+              key: database-password
