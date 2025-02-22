@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: strapi-app
-        image: your-docker-repo/strapi-app:latest
+        image: gcr.io/clean-sector-451411-i8/strapi:latest
         resources:
           requests:
             memory: "64Mi"
