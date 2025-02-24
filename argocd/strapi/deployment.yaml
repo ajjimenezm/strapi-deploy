@@ -26,15 +26,12 @@ spec:
         - containerPort: 1337
         env:
         - name: DATABASE_HOST
-          value: "your-database-host"
+          value: "34.121.187.245"
         - name: DATABASE_PORT
-          value: "your-database-port"
+          value: "5432"
         - name: DATABASE_NAME
-          value: "your-database-name"
+          value: "strapi"
         - name: DATABASE_USERNAME
-          value: "your-database-username"
+          value: "strapi_user"
         - name: DATABASE_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: strapi-secrets
-              key: database-password
+          value: "12345678qwerty"
