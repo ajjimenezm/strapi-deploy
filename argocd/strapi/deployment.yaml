@@ -26,7 +26,7 @@ spec:
         - containerPort: 1337
         env:
         - name: DATABASE_HOST
-          value: "34.121.187.245"
+          value: "10.75.176.4"
         - name: DATABASE_PORT
           value: "5432"
         - name: DATABASE_NAME
@@ -35,17 +35,3 @@ spec:
           value: "strapi_user"
         - name: DATABASE_PASSWORD
           value: "12345678qwerty"
-      - name: cloudsql-proxy
-        image: gcr.io/cloudsql-docker/gce-proxy:latest
-        resources:
-          requests:
-            memory: "64Mi"
-            cpu: "250m"
-          limits:
-            memory: "128Mi"
-            cpu: "500m"
-        command:
-          - "/cloud_sql_proxy"
-          - "-instances=clean-sector-451411-i8:us-central1:strapi-db-instance=tcp:5432"
-        securityContext:
-          runAsNonRoot: true
