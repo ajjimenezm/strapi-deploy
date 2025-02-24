@@ -7,7 +7,7 @@ COPY package.json package-lock.json ./
 RUN npm cache clean --force
 RUN npm install --omit=dev
 
-COPY . .
+COPY . . 
 RUN npm run build
 
-CMD ["node", "server.js"]
+CMD ["npm", "start"]
