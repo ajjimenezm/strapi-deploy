@@ -30,7 +30,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/ajjimenezm/strapi-deploy.git  # Your repo
+    repoURL: https://github.com/ajjimenezm/strapi-deploy.git
     targetRevision: HEAD
     path: argocd/grafana
   destination:
