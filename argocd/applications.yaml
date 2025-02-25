@@ -6,9 +6,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/ajjimenezm/strapi-deploy.git  # Replace with your Git repo URL
+    repoURL: https://github.com/ajjimenezm/strapi-deploy.git
     targetRevision: HEAD
-    path: argocd/strapi                    # Path to the directory with Strapi manifests in your Git repo
+    path: argocd/strapi
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: strapi
@@ -25,21 +25,91 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: grafana
+  name: prometheus
   namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 spec:
-  project: default
-  source:
-    repoURL: https://github.com/ajjimenezm/strapi-deploy.git
-    targetRevision: HEAD
-    path: argocd/grafana
   destination:
-    server: https://kubernetes.default.svc
     namespace: monitoring
+    server: https://kubernetes.default.svc
+  project: default
+  sources:
+    - repoURL: https://github.com/ajjimenezm/strapi-deploy.git
+      targetRevision: HEAD
+    - repoURL: https://prometheus-community.github.io/helm-charts/
+      chart: prometheus
+      targetRevision: 19.7.2
+      helm:
+        values: |
+            server:
+              service:
+                type: LoadBalancer
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
-      - Validate=true
+
+---
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: grafana
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: monitoring
+    server: https://kubernetes.default.svc
+  project: default
+  sources:
+  - repoURL: https://github.com/ajjimenezm/strapi-deploy.git
+    targetRevision: HEAD
+  - repoURL: https://grafana.github.io/helm-charts
+    chart: grafana
+    targetRevision: 6.52.2
+    helm:
+      values: |
+        service:
+          type: LoadBalancer
+        datasources:
+          datasources.yaml:
+            apiVersion: 1
+            datasources:
+              - name: Prometheus
+                type: prometheus
+                url: http://prometheus-server.monitoring.svc.cluster.local
+                access: proxy
+                isDefault: true
+              - name: loki
+                type: loki
+                url: http://loki.monitoring.svc.cluster.local
+                access: proxy
+        dashboardProviders:
+          dashboardproviders.yaml:
+            apiVersion: 1
+            providers:
+              - name: "default"
+                orgId: 1
+                folder: ""
+                type: file
+                disableDeletion: false
+                editable: true
+                options:
+                  path: /var/lib/grafana/dashboards/default
+        dashboards:
+          default:
+            kubernetes:
+              gnetId: 10000
+              revision: 1
+              datasource: Prometheus
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
