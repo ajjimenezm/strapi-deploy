@@ -10,3 +10,8 @@ service:
 
 testFramework:
   enabled: false
+
+serviceMonitor:
+  enabled: true
+  namespace: monitoring
+  interval: 30s 
