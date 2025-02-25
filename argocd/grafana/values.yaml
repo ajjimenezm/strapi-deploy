@@ -1,0 +1,9 @@
+persistence:
+  enabled: true
+  size: 10Gi
+
+adminUser: admin
+adminPassword: grafana123  # Change this in production!
+
+service:
+  type: LoadBalancer  # Change to ClusterIP if using Ingress
